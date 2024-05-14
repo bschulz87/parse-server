@@ -1,5 +1,5 @@
 import corsMiddleware from 'cors';
-import { createServer, renderGraphiQL } from '@graphql-yoga/node';
+import { createYoga } from 'graphql-yoga';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { handleParseErrors, handleParseHeaders } from '../middlewares';
@@ -58,7 +58,7 @@ class ParseGraphQLServer {
       return this._server;
     }
     const options = await this._getGraphQLOptions();
-    this._server = createServer(options);
+    this._server = createYoga(options);
     return this._server;
   }
 
@@ -98,6 +98,7 @@ class ParseGraphQLServer {
         requiredParameter('You must provide a config.playgroundPath to applyPlayground!'),
       (_req, res) => {
         res.setHeader('Content-Type', 'text/html');
+        throw Error("Unsupported");
         res.write(
           renderGraphiQL({
             endpoint: this.config.graphQLPath,
