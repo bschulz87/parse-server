@@ -118,8 +118,11 @@ export class FunctionsRouter extends PromiseRouter {
     };
   }
   static handleCloudFunction(req) {
-    const functionName = req.params.functionName;
-    const applicationId = req.config.applicationId;
+    const {
+      params: { functionName },
+      config: { applicationId },
+      parent,
+    } = req;
     const theFunction = triggers.getFunction(functionName, applicationId);
 
     if (!theFunction) {
@@ -128,7 +131,7 @@ export class FunctionsRouter extends PromiseRouter {
     let params = Object.assign({}, req.body, req.query);
     params = parseParams(params, req.config);
     const request = {
-      params: params,
+      params,
       master: req.auth && req.auth.isMaster,
       user: req.auth && req.auth.user,
       installationId: req.info.installationId,
@@ -137,6 +140,7 @@ export class FunctionsRouter extends PromiseRouter {
       ip: req.config.ip,
       functionName,
       context: req.info.context,
+      parent,
     };
 
     return new Promise(function (resolve, reject) {

@@ -11043,6 +11043,25 @@ describe('ParseGraphQLServer', () => {
       });
     });
 
+    it('provides parent data when resolving a field', async () => {
+      let parent;
+      Parse.Cloud.define('hasParentData', async req => {
+        parent = req.parent;
+        return true;
+      });
+      await apolloClient.query({
+        query: gql`
+          query {
+            hello4 {
+              hasParentData
+            }
+          }
+        `,
+      });
+      expect(parent.className).toEqual('User');
+      expect(parent.username).toEqual('somefolk');
+    });
+
     describe('GraphQL Schema Based', () => {
       let httpServer;
       const headers = {
