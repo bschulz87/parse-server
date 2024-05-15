@@ -60,7 +60,7 @@ class ParseGraphQLServer {
     this._server = createYoga({
       ...(await this._getGraphQLOptions()),
       cors: {
-        origin: 'http://localhost:3000',
+        origin: '*',
         credentials: true,
         allowedHeaders: ['*'],
         methods: ['*']
