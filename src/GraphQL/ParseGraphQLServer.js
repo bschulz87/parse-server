@@ -57,8 +57,15 @@ class ParseGraphQLServer {
     if (schemaRef === newSchemaRef && this._server) {
       return this._server;
     }
-    const options = await this._getGraphQLOptions();
-    this._server = createYoga(options);
+    this._server = createYoga({
+      ...(await this._getGraphQLOptions()),
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+        allowedHeaders: ['*'],
+        methods: ['*']
+      },
+    });
     return this._server;
   }
 
