@@ -58,13 +58,7 @@ class ParseGraphQLServer {
       return this._server;
     }
     this._server = createYoga({
-      ...(await this._getGraphQLOptions()),
-      cors: {
-        origin: '*',
-        credentials: true,
-        allowedHeaders: ['*'],
-        methods: ['*']
-      },
+      ...(await this._getGraphQLOptions())
     });
     return this._server;
   }
@@ -92,7 +86,9 @@ class ParseGraphQLServer {
     app.use(this.config.graphQLPath, handleParseErrors);
     app.use(this.config.graphQLPath, async (req, res) => {
       const server = await this._getServer();
-      return server(req, res);
+      const res = await server(req, res);
+      console.log("### applyGraphQL |", { res })
+      return res;
     });
   }
 
