@@ -86,9 +86,7 @@ class ParseGraphQLServer {
     app.use(this.config.graphQLPath, handleParseErrors);
     app.use(this.config.graphQLPath, async (req, res) => {
       const server = await this._getServer();
-      const serverRes = await server(req, res);
-      console.log("### applyGraphQL |", { serverRes })
-      return serverRes;
+      return server(req, res);
     });
   }
 
